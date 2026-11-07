@@ -1,7 +1,11 @@
 process.env.TZ = process.env.TZ || 'Asia/Makassar';
 const os = require('os'), http = require('http'), fs = require('fs'), path = require('path'), crypto = require('crypto');
 const { DatabaseSync } = require('node:sqlite');
+<<<<<<< HEAD
 const PORT = process.env.PORT || 3000, PASS = process.env.ADMIN_PASSWORD || 'admin123', SHOP = process.env.SHOP_NAME || 'Toko Pakaian';
+=======
+const PORT = process.env.PORT || 3000, PASS = process.env.ADMIN_PASSWORD || 'admin123', SHOP = process.env.SHOP_NAME || 'Toko Aksesoris';
+>>>>>>> e8c74e6ea9228599db0738954130fab9e294a9e4
 const db = new DatabaseSync(path.join(__dirname, 'toko.db'));
 db.exec(`
 CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);
@@ -13,7 +17,11 @@ CREATE TABLE IF NOT EXISTS reviews(id INTEGER PRIMARY KEY AUTOINCREMENT, order_i
 CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);`);
 try { db.exec('ALTER TABLE orders ADD COLUMN fulfil TEXT'); } catch {}
 const all = (s, ...a) => db.prepare(s).all(...a), get = (s, ...a) => db.prepare(s).get(...a), run = (s, ...a) => db.prepare(s).run(...a);
+<<<<<<< HEAD
 if (!get('SELECT id FROM categories')) for (const c of ['Atasan', 'Dress', 'Bawahan', 'Hijab']) run('INSERT INTO categories(name) VALUES(?)', c);
+=======
+if (!get('SELECT id FROM categories')) for (const c of ['Gelang', 'Kalung', 'Cincin', 'Anting']) run('INSERT INTO categories(name) VALUES(?)', c);
+>>>>>>> e8c74e6ea9228599db0738954130fab9e294a9e4
 const setting = k => get('SELECT value FROM settings WHERE key=?', k)?.value;
 const setS = (k, v) => run('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value', k, v);
 const bump = () => setS('v', String(Date.now()));
@@ -39,7 +47,11 @@ const savePhoto = (id, ph) => {
 
 // ---------- PUBLIK ----------
 R('GET', '/api/shop', () => ({
+<<<<<<< HEAD
   name: setting('name') || SHOP, pickup: setting('pickup') || '', wa: setting('wa') || '', tagline: setting('tagline') ?? 'Pakaian cantik untuk harimu', v: setting('v') || '0',
+=======
+  name: setting('name') || SHOP, pickup: setting('pickup') || '', wa: setting('wa') || '', tagline: setting('tagline') ?? 'Aksesoris cantik untuk harimu', v: setting('v') || '0',
+>>>>>>> e8c74e6ea9228599db0738954130fab9e294a9e4
   logo: !!setting('logo'), banner: !!setting('banner'), qris: !!setting('qris'),
   categories: all('SELECT * FROM categories ORDER BY id'),
   items: all('SELECT id,category_id,name,price,description,available,ver FROM products ORDER BY id DESC')
@@ -165,4 +177,8 @@ http.createServer(async (req, res) => {
     }
     throw err(404, 'API tidak ada');
   } catch (e) { res.writeHead(e.status || 500, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: e.status ? e.message : 'Server error', ...e.extra })); if (!e.status) console.error(e); }
+<<<<<<< HEAD
 }).listen(PORT, () => console.log(`\n♡ Toko berjalan\n   Pelanggan: http://localhost:${PORT}\n   Admin    : http://localhost:${PORT}/admin  (password: ${PASS})\n   Alamat HP (satu WiFi): http://${lanIP() || 'IP-laptop'}:${PORT}\n`));
+=======
+}).listen(PORT, () => console.log(`\n♡ Toko berjalan\n   Pelanggan: http://localhost:${PORT}\n   Admin    : http://localhost:${PORT}/admin  (password: ${PASS})\n   Alamat HP (satu WiFi): http://${lanIP() || 'IP-laptop'}:${PORT}\n`));
+>>>>>>> e8c74e6ea9228599db0738954130fab9e294a9e4
